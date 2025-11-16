@@ -25,7 +25,7 @@ export default function AppNavbar({
       >
         <Container>
           <Navbar.Brand as={Link} to="/">
-            UCSB Dining
+            Example
           </Navbar.Brand>
 
           <Navbar.Toggle />
@@ -64,11 +64,15 @@ export default function AppNavbar({
               )}
               {(hasRole(currentUser, "ROLE_ADMIN") ||
                 hasRole(currentUser, "ROLE_MODERATOR")) && (
-                <>
-                  <Nav.Link as={Link} to="/moderate">
-                    Moderate
-                  </Nav.Link>
-                </>
+                <NavDropdown
+                  title="Moderate"
+                  id="appnavbar-moderate-dropdown"
+                  data-testid="appnavbar-moderate-dropdown"
+                >
+                  <NavDropdown.Item as={Link} to="/moderate">
+                    Moderator Reviews
+                  </NavDropdown.Item>
+                </NavDropdown>
               )}
               {currentUser && currentUser.loggedIn ? (
                 <>

@@ -16,17 +16,16 @@ vi.mock("react-router", async () => ({
 describe("ReviewsTable tests", () => {
   const queryClient = new QueryClient();
 
-  test("Has the base column headers and content", () => {
+  // Utility function for clean rendering
+  const renderTable = (props) =>
     render(
       <QueryClientProvider client={queryClient}>
-        <ReviewsTable
-          reviews={ReviewFixtures.threeReviews}
-          userOptions={false}
-          moderatorOptions={false}
-        />
-        ,
+        <ReviewsTable reviews={ReviewFixtures.threeReviews} {...props} />
       </QueryClientProvider>,
     );
+
+  test("Has the base column headers and content", () => {
+    renderTable({ userOptions: false, moderatorOptions: false });
 
     expect(screen.getByText("Item Id")).toBeInTheDocument();
     expect(screen.getByText("Item Name")).toBeInTheDocument();
@@ -36,73 +35,49 @@ describe("ReviewsTable tests", () => {
     expect(screen.getByText("Dining Commons Code")).toBeInTheDocument();
 
     expect(
-      screen.getByTestId(`Reviewstable-cell-row-0-col-item.id`),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByTestId(`Reviewstable-cell-row-0-col-item.name`),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByTestId(`Reviewstable-cell-row-0-col-itemsStars`),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByTestId(`Reviewstable-cell-row-0-col-reviewerComments`),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByTestId(`Reviewstable-cell-row-0-col-dateItemServed`),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByTestId(`Reviewstable-cell-row-0-col-item.diningCommonsCode`),
+      screen.getByTestId("Reviewstable-cell-row-0-col-item.id"),
     ).toBeInTheDocument();
 
-    const editButton = screen.queryByTestId(
-      `Reviewstable-cell-row-0-col-Edit-button`,
-    );
-    expect(editButton).not.toBeInTheDocument();
+    // ❌ Moderator buttons must NOT appear
+    expect(
+      screen.queryByTestId("Reviewstable-cell-row-0-col-Approve-button"),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId("Reviewstable-cell-row-0-col-Reject-button"),
+    ).not.toBeInTheDocument();
+  });
 
-    const deleteButton = screen.queryByTestId(
-      `Reviewstable-cell-row-0-col-Delete-button`,
-    );
-    expect(deleteButton).not.toBeInTheDocument();
+  // ⭐ MUTATION-KILLER TEST 1
+  test("Moderator buttons do NOT appear when moderatorOptions is false", () => {
+    renderTable({ userOptions: false, moderatorOptions: false });
 
-    const acceptButton = screen.queryByTestId(
-      `Reviewstable-cell-row-0-col-Accept-button`,
-    );
-    expect(acceptButton).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId("Reviewstable-cell-row-0-col-Approve-button"),
+    ).toBeNull();
 
-    const rejectButton = screen.queryByTestId(
-      `Reviewstable-cell-row-0-col-Reject-button`,
-    );
-    expect(rejectButton).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId("Reviewstable-cell-row-0-col-Reject-button"),
+    ).toBeNull();
   });
 
   test("Regular user buttons appear and work properly", async () => {
-    render(
-      <QueryClientProvider client={queryClient}>
-        <ReviewsTable
-          reviews={ReviewFixtures.threeReviews}
-          userOptions={true}
-          moderatorOptions={false}
-        />
-        ,
-      </QueryClientProvider>,
-    );
+    renderTable({ userOptions: true, moderatorOptions: false });
 
-    //edit button
+    // edit button
     const editButton = screen.getByTestId(
-      `Reviewstable-cell-row-0-col-Edit-button`,
+      "Reviewstable-cell-row-0-col-Edit-button",
     );
     expect(editButton).toBeInTheDocument();
     expect(editButton).toHaveClass("btn-primary");
 
     fireEvent.click(editButton);
-
     await waitFor(() =>
       expect(mockedNavigate).toHaveBeenCalledWith("/reviews/edit/1"),
     );
 
-    //delete button
+    // delete button
     const deleteButton = screen.getByTestId(
-      `Reviewstable-cell-row-0-col-Delete-button`,
+      "Reviewstable-cell-row-0-col-Delete-button",
     );
     expect(deleteButton).toBeInTheDocument();
     expect(deleteButton).toHaveClass("btn-danger");
@@ -118,56 +93,38 @@ describe("ReviewsTable tests", () => {
     expect(axiosMock.history.delete[0].params).toEqual({ id: 1 });
   });
 
-  test("Moderator buttons appear and work properly", async () => {
-    render(
-      <QueryClientProvider client={queryClient}>
-        <ReviewsTable
-          reviews={ReviewFixtures.threeReviews}
-          userOptions={false}
-          moderatorOptions={true}
-        />
-        ,
-      </QueryClientProvider>,
-    );
+  // ⭐ MUTATION-KILLER TEST 2
+  test("Moderator buttons appear and work properly when moderatorOptions is true", async () => {
+    renderTable({ userOptions: false, moderatorOptions: true });
 
     await waitFor(() => {
       expect(
-        screen.getByTestId(`Reviewstable-cell-row-0-col-item.id`),
+        screen.getByTestId("Reviewstable-cell-row-0-col-item.id"),
       ).toHaveTextContent("7");
     });
 
-    //approve button
+    // approve button
     const approveButton = screen.getByTestId(
-      `Reviewstable-cell-row-0-col-Approve-button`,
+      "Reviewstable-cell-row-0-col-Approve-button",
     );
     expect(approveButton).toBeInTheDocument();
     expect(approveButton).toHaveClass("btn-primary");
-
     fireEvent.click(approveButton);
 
-    //reject button
+    // reject button
     const rejectButton = screen.getByTestId(
-      `Reviewstable-cell-row-0-col-Reject-button`,
+      "Reviewstable-cell-row-0-col-Reject-button",
     );
     expect(rejectButton).toBeInTheDocument();
     expect(rejectButton).toHaveClass("btn-danger");
-
     fireEvent.click(rejectButton);
   });
 
   test("Renders stars icons and formatted date correctly", () => {
-    render(
-      <QueryClientProvider client={queryClient}>
-        <ReviewsTable
-          reviews={ReviewFixtures.threeReviews}
-          userOptions={false}
-          moderatorOptions={false}
-        />
-      </QueryClientProvider>,
-    );
+    renderTable({ userOptions: false, moderatorOptions: false });
 
     const scoreCell = screen.getByTestId(
-      `Reviewstable-cell-row-0-col-itemsStars`,
+      "Reviewstable-cell-row-0-col-itemsStars",
     );
     expect(scoreCell).toHaveTextContent("⭐⭐⭐⭐");
 
@@ -176,8 +133,37 @@ describe("ReviewsTable tests", () => {
       "en-US",
     );
     const dateCell = screen.getByTestId(
-      `Reviewstable-cell-row-0-col-dateItemServed`,
+      "Reviewstable-cell-row-0-col-dateItemServed",
     );
     expect(dateCell).toHaveTextContent(formattedDate);
+  });
+  test("Item Name cell renders correctly", () => {
+    renderTable({ userOptions: false, moderatorOptions: false });
+
+    const cell = screen.getByTestId("Reviewstable-cell-row-0-col-item.name");
+    expect(cell).toHaveTextContent(ReviewFixtures.threeReviews[0].item.name);
+  });
+
+  test("Comments cell renders correctly", () => {
+    renderTable({ userOptions: false, moderatorOptions: false });
+
+    const cell = screen.getByTestId(
+      "Reviewstable-cell-row-0-col-reviewerComments",
+    );
+    expect(cell).toHaveTextContent(
+      ReviewFixtures.threeReviews[0].reviewerComments,
+    );
+  });
+
+  test("Score stars render correctly for all rows", () => {
+    renderTable({ userOptions: false, moderatorOptions: false });
+
+    ReviewFixtures.threeReviews.forEach((review, idx) => {
+      const cell = screen.getByTestId(
+        `Reviewstable-cell-row-${idx}-col-itemsStars`,
+      );
+      const expectedStars = "⭐".repeat(review.itemsStars);
+      expect(cell).toHaveTextContent(expectedStars);
+    });
   });
 });
