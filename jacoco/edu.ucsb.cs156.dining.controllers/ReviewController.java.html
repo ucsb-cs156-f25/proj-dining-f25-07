@@ -170,12 +170,12 @@ import org.springframework.web.bind.annotation.RestController;
 <span class="fc" id="L170">    Review review =</span>
         reviewRepository
 <span class="fc" id="L172">            .findById(id)</span>
-<span class="pc" id="L173">            .orElseThrow(() -&gt; new EntityNotFoundException(Review.class, id));</span>
+<span class="fc" id="L173">            .orElseThrow(() -&gt; new EntityNotFoundException(Review.class, id));</span>
 <span class="fc" id="L174">    User current = getCurrentUser().getUser();</span>
 <span class="fc bfc" id="L175" title="All 2 branches covered.">    boolean isOwner = current.getId() == review.getReviewer().getId();</span>
 <span class="fc" id="L176">    boolean isAdmin = current.getAdmin();</span>
 <span class="fc" id="L177">    boolean isModerator = current.getModerator();</span>
-<span class="pc bpc" id="L178" title="2 of 6 branches missed.">    if (!isOwner &amp;&amp; !isAdmin &amp;&amp; !isModerator) {</span>
+<span class="fc bfc" id="L178" title="All 6 branches covered.">    if (!isOwner &amp;&amp; !isAdmin &amp;&amp; !isModerator) {</span>
 <span class="fc" id="L179">      throw new AccessDeniedException(&quot;No permission to view review&quot;);</span>
     }
 <span class="fc" id="L181">    return review;</span>
