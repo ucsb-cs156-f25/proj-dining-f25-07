@@ -224,35 +224,33 @@ describe("AppNavbar tests", () => {
       loggedIn: true,
       root: {
         user: {
-          email: "test@example.org"
-        }
-      }
+          email: "test@example.org",
+        },
+      },
     };
-  
+
     const systemInfo = { oauthLogin: "/oauth2/authorization/google" };
-  
+
     render(
       <MemoryRouter>
         <AppNavbar currentUser={currentUser} systemInfo={systemInfo} />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
-  
+
     expect(screen.getByText("My Reviews")).toBeInTheDocument();
   });
 
   test("does NOT show My Reviews link when user is logged out", () => {
     const currentUser = { loggedIn: false };
-  
+
     const systemInfo = { oauthLogin: "/oauth2/authorization/google" };
-  
+
     render(
       <MemoryRouter>
         <AppNavbar currentUser={currentUser} systemInfo={systemInfo} />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
-  
+
     expect(screen.queryByText("My Reviews")).not.toBeInTheDocument();
   });
-  
-    
 });
