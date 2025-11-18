@@ -218,4 +218,41 @@ describe("AppNavbar tests", () => {
       "/oauth2/authorization/google",
     );
   });
+
+  test("shows My Reviews link when user is logged in", () => {
+    const currentUser = {
+      loggedIn: true,
+      root: {
+        user: {
+          email: "test@example.org"
+        }
+      }
+    };
+  
+    const systemInfo = { oauthLogin: "/oauth2/authorization/google" };
+  
+    render(
+      <MemoryRouter>
+        <AppNavbar currentUser={currentUser} systemInfo={systemInfo} />
+      </MemoryRouter>
+    );
+  
+    expect(screen.getByText("My Reviews")).toBeInTheDocument();
+  });
+
+  test("does NOT show My Reviews link when user is logged out", () => {
+    const currentUser = { loggedIn: false };
+  
+    const systemInfo = { oauthLogin: "/oauth2/authorization/google" };
+  
+    render(
+      <MemoryRouter>
+        <AppNavbar currentUser={currentUser} systemInfo={systemInfo} />
+      </MemoryRouter>
+    );
+  
+    expect(screen.queryByText("My Reviews")).not.toBeInTheDocument();
+  });
+  
+    
 });
