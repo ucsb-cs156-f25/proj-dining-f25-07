@@ -2,7 +2,7 @@ import React from "react";
 import BasicLayout from "main/layouts/BasicLayout/BasicLayout";
 import { useCurrentUser, hasRole } from "main/utils/currentUser";
 import { Button, Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 export default function ModerateMenuPage() {
   const currentUser = useCurrentUser();
@@ -37,9 +37,7 @@ export default function ModerateMenuPage() {
             Moderate Aliases
           </Button>
         </div>
-        
       </Container>
     </BasicLayout>
   );
 }
-

@@ -14,20 +14,32 @@ describe("ModerateMenuPage Tests", () => {
 
   const setupAdmin = () => {
     axiosMock.reset();
-    axiosMock.onGet("/api/currentUser").reply(200, apiCurrentUserFixtures.adminUser);
-    axiosMock.onGet("/api/systemInfo").reply(200, systemInfoFixtures.showingNeither);
+    axiosMock
+      .onGet("/api/currentUser")
+      .reply(200, apiCurrentUserFixtures.adminUser);
+    axiosMock
+      .onGet("/api/systemInfo")
+      .reply(200, systemInfoFixtures.showingNeither);
   };
 
   const setupModerator = () => {
     axiosMock.reset();
-    axiosMock.onGet("/api/currentUser").reply(200, apiCurrentUserFixtures.moderatorUser);
-    axiosMock.onGet("/api/systemInfo").reply(200, systemInfoFixtures.showingNeither);
+    axiosMock
+      .onGet("/api/currentUser")
+      .reply(200, apiCurrentUserFixtures.moderatorUser);
+    axiosMock
+      .onGet("/api/systemInfo")
+      .reply(200, systemInfoFixtures.showingNeither);
   };
 
   const setupUserOnly = () => {
     axiosMock.reset();
-    axiosMock.onGet("/api/currentUser").reply(200, apiCurrentUserFixtures.userOnly);
-    axiosMock.onGet("/api/systemInfo").reply(200, systemInfoFixtures.showingNeither);
+    axiosMock
+      .onGet("/api/currentUser")
+      .reply(200, apiCurrentUserFixtures.userOnly);
+    axiosMock
+      .onGet("/api/systemInfo")
+      .reply(200, systemInfoFixtures.showingNeither);
   };
 
   test("shows menu for admin", async () => {
@@ -46,8 +58,12 @@ describe("ModerateMenuPage Tests", () => {
       expect(screen.getByText("Moderation Menu")).toBeInTheDocument();
     });
 
-    expect(screen.getByRole("button", { name: /moderate reviews/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /moderate aliases/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /moderate reviews/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /moderate aliases/i }),
+    ).toBeInTheDocument();
   });
 
   test("shows menu for moderator", async () => {
@@ -66,7 +82,9 @@ describe("ModerateMenuPage Tests", () => {
       expect(screen.getByText("Moderation Menu")).toBeInTheDocument();
     });
 
-    expect(screen.getByRole("button", { name: /moderate reviews/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /moderate reviews/i }),
+    ).toBeInTheDocument();
   });
 
   test("shows Access Denied for regular user", async () => {
