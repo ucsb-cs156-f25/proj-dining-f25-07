@@ -2,7 +2,6 @@ import React from "react";
 import ModerateMenuPage from "main/pages/ModerateMenuPage";
 import { apiCurrentUserFixtures } from "fixtures/currentUserFixtures";
 import { systemInfoFixtures } from "fixtures/systemInfoFixtures";
-import { http, HttpResponse } from "msw";
 
 export default {
   title: "pages/Moderate/Menu",
