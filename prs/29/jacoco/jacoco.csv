@@ -10,7 +10,7 @@ proj-dining,edu.ucsb.cs156.dining.controllers,SystemInfoController,0,7,0,0,0,2,0
 proj-dining,edu.ucsb.cs156.dining.controllers,ReviewController,0,383,0,32,0,85,0,34,0,18
 proj-dining,edu.ucsb.cs156.dining.controllers,UCSBDiningMenuItemsController,0,95,0,4,0,21,0,6,0,4
 proj-dining,edu.ucsb.cs156.dining.controllers,ApiController,0,24,0,0,0,7,0,5,0,5
-proj-dining,edu.ucsb.cs156.dining.controllers,UCSBDiningMenuController,0,17,0,0,0,4,0,3,0,3
+proj-dining,edu.ucsb.cs156.dining.controllers,UCSBDiningMenuController,0,21,0,0,0,6,0,3,0,3
 proj-dining,edu.ucsb.cs156.dining.statuses,ModerationStatus,0,21,0,0,0,4,0,1,0,1
 proj-dining,edu.ucsb.cs156.dining.errors,EntityNotFoundException,0,17,0,0,0,2,0,1,0,1
 proj-dining,edu.ucsb.cs156.dining.models,DiningCommons,0,13,0,0,0,3,0,1,0,1
